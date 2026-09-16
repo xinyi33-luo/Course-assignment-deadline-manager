@@ -111,6 +111,49 @@ def view_assignments(only_undone=False):
         print(f"{i}. [{status}] {a['course']} - {a['title']}")
         print(f"   截止：{a['due_date']}（{deadline_text}）  预计工时：{a['hours']} 小时")
 
+def mark_done():
+    """让用户选择一条未完成作业，标记为已完成。"""
+    assignments = load_assignments()
+    undone = [a for a in assignments if not a["done"]]
+
+    if not undone:
+        print("\n没有未完成的作业。")
+        return
+
+    # 排序，保证编号和"查看未完成作业"一致
+    undone.sort(key=lambda a: a["due_date"])
+
+    print("\n--- 选择要标记完成的作业 ---")
+    for i, a in enumerate(undone, start=1):
+        print(f"{i}. {a['course']} - {a['title']}（截止：{a['due_date']}）")
+
+    choice = input("请输入编号（直接回车取消）：").strip()
+
+    if choice == "":
+        print("已取消。")
+        return
+
+    try:
+        index = int(choice)
+    except ValueError:
+        print("请输入数字。")
+        return
+
+    if index < 1 or index > len(undone):
+        print("编号超出范围。")
+        return
+
+    # 取出用户选中的那一条
+    selected = undone[index - 1]
+
+    # 在原始列表里找到它并改成已完成
+    for a in assignments:
+        if a is selected:
+            a["done"] = True
+            break
+
+    save_assignments(assignments)
+    print(f"已完成：{selected['course']} - {selected['title']}")
 
 def main():
     while True:
@@ -131,7 +174,7 @@ def main():
         elif choice == "3":
             view_assignments(only_undone=True)
         elif choice == "4":
-            print("这个功能还没做。")
+            mark_done()
         elif choice == "5":
             print("这个功能还没做。")
         elif choice == "0":
