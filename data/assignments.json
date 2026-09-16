@@ -1,9 +1,37 @@
 [
   {
     "course": "概率论",
-    "title": "第二次作业",
-    "due_date": "2026-9-21",
+    "title": "第三章课后习题",
+    "due_date": "2026-09-18",
     "hours": 3.0,
+    "done": false
+  },
+  {
+    "course": "统计模型与推断",
+    "title": "课后习题",
+    "due_date": "2026-09-25",
+    "hours": 3.0,
+    "done": false
+  },
+  {
+    "course": "计算机技能",
+    "title": "小作业",
+    "due_date": "2026-09-15",
+    "hours": 4.0,
+    "done": false
+  },
+  {
+    "course": "计算机技能",
+    "title": "上机实验",
+    "due_date": "2026-09-10",
+    "hours": 2.0,
     "done": true
+  },
+  {
+    "course": "概率论",
+    "title": "第四章课后习题",
+    "due_date": "2026-10-01",
+    "hours": 5.0,
+    "done": false
   }
 ]
