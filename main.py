@@ -155,6 +155,56 @@ def mark_done():
     save_assignments(assignments)
     print(f"已完成：{selected['course']} - {selected['title']}")
 
+def show_statistics():
+    """显示作业统计信息。"""
+    assignments = load_assignments()
+
+    print("\n--- 统计 ---")
+
+    if not assignments:
+        print("目前没有作业记录。")
+        return
+
+    total = len(assignments)
+    done_count = sum(1 for a in assignments if a["done"])
+    undone_count = total - done_count
+
+    # 逾期：未完成，且剩余天数小于 0
+    overdue_count = sum(
+        1 for a in assignments
+        if not a["done"] and days_left(a["due_date"]) < 0
+    )
+
+    rate = done_count / total * 100
+
+    print(f"总作业数：{total}")
+    print(f"已完成：{done_count}")
+    print(f"未完成：{undone_count}")
+    print(f"逾期：{overdue_count}")
+    print(f"完成率：{rate:.1f}%")
+
+    # 未完成作业的总预计工时
+    pending_hours = sum(
+        a["hours"] for a in assignments if not a["done"]
+    )
+    print(f"未完成作业总预计工时：{pending_hours:.1f} 小时")
+
+    # 每门课的统计
+    print("\n按课程统计：")
+    courses = {}
+    for a in assignments:
+        name = a["course"]
+        if name not in courses:
+            courses[name] = {"total": 0, "done": 0}
+        courses[name]["total"] += 1
+        if a["done"]:
+            courses[name]["done"] += 1
+
+    for name, info in sorted(courses.items()):
+        t = info["total"]
+        d = info["done"]
+        print(f"  {name}：共 {t} 条，已完成 {d} 条（{d/t*100:.0f}%）")
+
 def main():
     while True:
         print("\n===== 课程作业截止日期管理器 =====")
@@ -176,7 +226,7 @@ def main():
         elif choice == "4":
             mark_done()
         elif choice == "5":
-            print("这个功能还没做。")
+            show_statistics()
         elif choice == "0":
             print("再见！")
             break
